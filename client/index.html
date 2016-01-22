@@ -10,7 +10,12 @@
       <div class="current">Current score: <span>0</span></div>
       <div class="collisions">Collisions: <span>0</span></div>
     </div>
-    <div class="board"><div class="mouse"></div></div>
+    <div class="board">
+    <svg width="1000" height="800">
+      <circle cx="50" cy="50" r="50" stroke="green" stroke-width="1" fill="yellow" />
+      <circle cx="200" cy="200" r="50" stroke="green" stroke-width="1" fill="yellow" />
+    </svg>
+    <div class="mouse"></div></div>
     <script src="lib/d3.js" charset="utf-8"></script>
     <script src='watchout.js'></script>
   </body>
