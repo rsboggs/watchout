@@ -4,6 +4,8 @@ var width = 800;
 var enemyRadius = 30;
 var heroRadius = 15;
 var time = 0;
+var highScore = 0;
+var collisions = 0;
 
 var createBadGuys = function() {
   var badGuys = [];
@@ -27,10 +29,32 @@ var randomLocation = function(badGuy) {
   return badGuy;
 };
 
+var collisionCheck = function (badGuy) {
+      // if SQUR ROOT of: (guys[i] x - hero x)sqrd + (guys[i] y - hero y) squrd <= hero radius + enemy radius 
+      if(Math.sqrt(Math.pow((badGuy["cx"]["animVal"]["value"] - hero.attr('cx')),2) + Math.pow((badGuy["cy"]["animVal"]["value"] - hero.attr('cy')),2)) <= (heroRadius+enemyRadius)) {
+        return true;
+    }
+    return false;
+};
+
 var mapBoard = function (badGuyArray) {
   var board = d3.select("svg").selectAll(".badGuys").data(badGuyArray);
   // UPDATE
-  board.transition().duration(1000).attr("cx",function (d) {return d.x;}).attr("cy",function (d) {return d.y;});
+  board.transition().duration(1000)
+    .tween('custom', function() {
+      if(collisionCheck(this)) {
+        if(time>highScore) {
+           highScore = time;
+        }
+        collisions++;
+        time = 0;
+        d3.select(".highscore span").text(highScore);
+        d3.select(".current span").text(time);
+        d3.select(".collisions span").text(collisions);
+      }
+     })
+    .attr("cx",function (d) {return d.x;})
+    .attr("cy",function (d) {return d.y;});
   // ENTER
   board.enter().append("circle")
     .attr("cx",function (d) {return d.x;})
@@ -38,8 +62,7 @@ var mapBoard = function (badGuyArray) {
     .attr('class','badGuys')
     .attr("r", "30")
     .attr("fill","yellow")
-    .attr("stroke", "red")
-;
+    .attr("stroke", "red");
   // EXIT
   board.exit().remove();
 };
@@ -78,15 +101,6 @@ var createHero = function () {
 };
 
 
-var CollisionCheck = function () {
-    for (var i = 0; i < 20; i++) {
-      // if SQUR ROOT of: (guys[i] x - hero x)sqrd + (guys[i] y - hero y) squrd <= hero radius + enemy radius 
-      if(Math.sqrt(Math.pow((guys[i]["x"] - hero.attr('cx')),2) + Math.pow((guys[i]["y"] - hero.attr('cy')),2)) <= (heroRadius+enemyRadius)) {
-        return true;
-      }
-    }
-    return false;
-};
 
 var hero = d3.select("svg").selectAll(".draggable").data("hero");
 var guys = createBadGuys();
