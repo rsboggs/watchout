@@ -10,7 +10,7 @@ var lastPosition = [];
 var collided = false;
 var createBadGuys = function() {
   var badGuys = [];
-  for (var i = 0; i < 4; i++) {
+  for (var i = 0; i < 20; i++) {
     var cx = Math.floor(Math.random() * (width - 2 * enemyRadius)) + enemyRadius;
     var cy = Math.floor(Math.random() * (height - 2 * enemyRadius)) + enemyRadius;
     badGuys.push({x: cx, y: cy, id: i});
@@ -19,7 +19,7 @@ var createBadGuys = function() {
 };
 
 var adjustLocation = function(badGuys, callback) {
-  for (var i = 0; i < 4; i++) {
+  for (var i = 0; i < 20; i++) {
     lastPosition[i] = JSON.parse(JSON.stringify(badGuys[i]));
     badGuys[i] = callback(badGuys[i]);
   }
@@ -115,8 +115,8 @@ var createHero = function () {
     hero.style('fill', 'white');
     timer(); })
   .on('drag', function () { 
-    hero.attr('cx', d3.event.x)
-    .attr('cy', d3.event.y); })
+    hero.attr('cx', Math.max(heroRadius, Math.min(width - heroRadius, d3.event.x)))
+    .attr('cy', Math.max(heroRadius, Math.min(height - heroRadius, d3.event.y)))})
   .on('dragend',function () { 
     hero.style('fill', 'green'); });
 
