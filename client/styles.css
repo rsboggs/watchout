@@ -4,7 +4,7 @@
 Feel free to use it if you like. */
 
 .board {
-  background-color: black;
-  width:1000px;
-  height:1000px;
+  background-color: blue;
+  width:800px;
+  height:600px;
 }
