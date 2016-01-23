@@ -18,13 +18,14 @@ var adjustLocation = function(badGuys, callback) {
 var randomLocation = function(badGuy) {
   badGuy.x = Math.floor(Math.random() * 740) + 30;
   badGuy.y = Math.floor(Math.random() * 540) + 30;
+  return badGuy;
 };
 
 var mapBoard = function (badGuyArray) {
   var board = d3.select("svg").selectAll("circle").data(badGuyArray);
 
   // UPDATE
-  board.attr("cx",function (d) {return d.x;}).attr("cy",function (d) {return d.y;});
+  board.transition().duration(1000).attr("cx",function (d) {return d.x;}).attr("cy",function (d) {return d.y;});
   // ENTER
   board.enter().append("circle")
     .attr("cx",function (d) {return d.x;})
@@ -39,3 +40,7 @@ var mapBoard = function (badGuyArray) {
 
 var guys = createBadGuys();
 mapBoard(guys);
+setInterval(function() {
+  adjustLocation(guys, randomLocation);
+  mapBoard(guys);
+}, 1000);
